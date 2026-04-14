@@ -1,3 +1,8 @@
+# Roadmap:
+
+- [] Define the expected outputs for every step/agent
+- [] Support variety of tasks. Currently, only general coding tasks
+
 # Harness — Three-Agent Build System for Claude Code
 
 A lightweight implementation of the [harness design pattern](https://www.anthropic.com/engineering/harness-design-long-running-apps) for Claude Code. Three specialized agents — Planner, Generator, and Evaluator — collaborate through file-based handoffs to build software iteratively with quality gates.
