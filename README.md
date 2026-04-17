@@ -1,6 +1,6 @@
 # Roadmap:
 
-- [] Define the expected outputs for every step/agent
+- [x] Define the expected outputs for every step/agent (YAML frontmatter contracts — see `.claude/commands/*`)
 - [] Support variety of tasks. Currently, only general coding tasks
 
 # Harness — Three-Agent Build System for Claude Code
