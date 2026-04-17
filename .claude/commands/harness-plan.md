@@ -20,7 +20,7 @@ The user will provide a brief task description (1-4 sentences). This is provided
 harness_artifact: plan
 version: 1
 title: <short title>
-task_type: code          # reserved — only "code" is supported today
+task_type: code          # one of: code | writing | research | design — see Vocabulary
 phase_count: <integer>   # must equal the number of phases in the body
 ---
 ```
