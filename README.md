@@ -1,7 +1,7 @@
 # Roadmap:
 
 - [x] Define the expected outputs for every step/agent (YAML frontmatter contracts — see `.claude/commands/*`)
-- [] Support variety of tasks. Currently, only general coding tasks
+- [x] Support variety of tasks via `task_type` (code | writing | research | design)
 
 # Harness — Three-Agent Build System for Claude Code
 
@@ -118,6 +118,19 @@ The article's key insight: *every harness component encodes an assumption about 
 - If evaluation is always passing first try → reduce iteration caps
 - If tasks are simple enough → use `/harness-plan` + `/harness-generate` without the Evaluator
 - For subjective tasks (design, UX) → add screenshot-based evaluation criteria
+
+## Task types
+
+The harness supports four `task_type` values (auto-inferred by the Planner; override by editing `.harness/PLAN.md` after `/harness-plan`):
+
+| `task_type` | Artifact style | Criterion style | Evaluator strategy |
+|---|---|---|---|
+| `code` | source files, tests | runnable commands | execute and verify |
+| `writing` | prose (Markdown) | rubric items | judge against rubric |
+| `research` | report with Sources | claim-citation requirements | audit citations |
+| `design` | screens + image refs | observable visual properties | inspect screenshots |
+
+Mix-and-match is explicitly out of scope for a single run — one plan, one `task_type`. Split multi-modal projects into multiple runs.
 
 ## Credits
 
