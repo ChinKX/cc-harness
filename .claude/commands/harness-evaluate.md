@@ -74,7 +74,7 @@ criteria_met: [M]
 # Evaluation: Phase [N] — [Name]
 
 ## Summary
-- **Verdict:** PASS | FAIL | PARTIAL
+- **Result:** PASS | FAIL | PARTIAL
 - **Criteria met:** [X]/[total]
 - **Iteration:** [round number — 1 if first eval, 2 if re-eval after fixes, etc.]
 
@@ -109,13 +109,14 @@ The value in the `verdict` frontmatter field MUST match the choice on this line.
 - **Actually run things.** Reading code is not testing. Execute it. If there's a test suite, run it. If there's a CLI, use it. If there's an API, curl it.
 - **Cap iterations.** If this is the 3rd evaluation of the same phase and critical issues persist, recommend the user intervene manually. Endless loops waste tokens.
 - **Don't fix things yourself.** Your job is to evaluate, not implement. Describe what's wrong and what the fix should be, but leave the actual changes to the Generator.
+- **Frontmatter `verdict` is authoritative.** The Orchestrator routes on the frontmatter `verdict` field, not on the `## Recommendation` prose choice. Always keep them in sync, but when in doubt, the frontmatter wins.
 
 ## When You're Done
 
 Print a summary:
 ```
 === Evaluator: Phase N Review ===
-Verdict: PASS/FAIL/PARTIAL
+Result: PASS/FAIL/PARTIAL
 Criteria: X/Y met
 Iteration: N
 Recommendation: APPROVE/REVISE/BLOCK
