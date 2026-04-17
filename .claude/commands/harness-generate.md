@@ -11,7 +11,7 @@ If no phase is specified, implement the next incomplete phase.
 ## Contract
 
 ### Preconditions
-- `.harness/PLAN.md` exists and contains `phase_count` in its frontmatter.
+- `.harness/PLAN.md` exists and contains `phase_count` and `task_type` in its frontmatter.
 - Target phase is identified: `$ARGUMENTS` if provided, otherwise the smallest phase id in `[1..phase_count]` not present in `.harness/STATE.md` frontmatter `phases_complete`.
 - If `.harness/FEEDBACK.md` exists with `verdict: REVISE`, every issue listed must be addressed before the phase can be marked complete.
 
@@ -40,10 +40,15 @@ total_phases: <integer>
 
 ## Your Process
 
-1. **Implement the phase** — write clean, well-structured code that satisfies every acceptance criterion. Use standard practices for the language/framework specified in the plan.
-2. **Self-check** — before finishing, run through each acceptance criterion yourself. Execute tests, run the code, verify outputs. Fix anything that's broken.
-3. **Commit atomically** — make a git commit for the phase with a clear message: `harness: complete phase N — [phase name]`
-4. **Update state** — ensure `.harness/STATE.md` has the required frontmatter (create if missing, otherwise overwrite to reflect the new `current_phase` and updated `phases_complete` list), then append a phase block to the body:
+1. **Read `task_type` from `.harness/PLAN.md` frontmatter** and select your output mode:
+   - `code` — produce source files, tests, and a git commit as described below. Run the code to self-check.
+   - `writing` — produce prose files (e.g., `docs/<slug>.md`, `content/<slug>.md`). Do NOT create source files unless the phase explicitly requires them. Still commit.
+   - `research` — produce a structured report file (e.g., `research/<slug>.md`) with a Sources section at the bottom. Every factual claim must link to an entry in Sources. Still commit.
+   - `design` — produce an artifact reference file (e.g., `design/<slug>.md`) describing the screens/components delivered, with paths to any exported images. Still commit.
+2. **Implement the phase** — write clean, well-structured code that satisfies every acceptance criterion. Use standard practices for the language/framework specified in the plan.
+3. **Self-check** — before finishing, run through each acceptance criterion yourself. Execute tests, run the code, verify outputs. Fix anything that's broken.
+4. **Commit atomically** — make a git commit for the phase with a clear message: `harness: complete phase N — [phase name]`
+5. **Update state** — ensure `.harness/STATE.md` has the required frontmatter (create if missing, otherwise overwrite to reflect the new `current_phase` and updated `phases_complete` list), then append a phase block to the body:
 
 ```markdown
 ---
@@ -64,6 +69,7 @@ total_phases: M
 ## Rules
 
 - **Stay in scope.** Only implement what the current phase specifies. Do not jump ahead or add features from later phases.
+- **Honor the `task_type`.** Do not over-reach beyond what the task type calls for (e.g., don't generate code for a `writing` task just because the Planner's criteria felt ambiguous — escalate instead).
 - **Respect the plan.** If you disagree with a technical decision in PLAN.md, note your concern in STATE.md but implement as specified. The Planner made that decision for a reason.
 - **Address ALL feedback.** If FEEDBACK.md has items, every single one must be resolved or explicitly responded to in STATE.md with a reason why it was not addressed.
 - **No silent failures.** If something doesn't work, document it in STATE.md rather than hiding it.
