@@ -6,6 +6,21 @@ You are the **Orchestrator** for a three-agent harness system. You coordinate th
 
 A task description to build. This is provided as: $ARGUMENTS
 
+## Contract
+
+### Inputs (read-only)
+- `.harness/PLAN.md` — frontmatter fields `phase_count`, `task_type`; body phase definitions.
+- `.harness/STATE.md` — frontmatter fields `phases_complete`, `current_phase`, `total_phases`.
+- `.harness/FEEDBACK.md` — frontmatter fields `verdict`, `iteration`, `phase_id`.
+
+### Control flow (driven by frontmatter, NOT prose)
+- **Next phase to generate:** smallest integer in `[1..phase_count]` not in `STATE.md`'s `phases_complete`.
+- **After each evaluation, read `FEEDBACK.md` frontmatter `verdict`:**
+  - `APPROVE` → advance: add `phase_id` to `phases_complete`, run Generator for the next phase.
+  - `REVISE` → if `iteration < 3`, re-run Generator for the same `phase_id`; otherwise treat as `BLOCK`.
+  - `BLOCK` → append a BLOCKED note to `STATE.md`, print final summary, stop.
+- **Never parse the prose recommendation line** — it is a human-readable mirror of the `verdict` field; the field is authoritative.
+
 ## Workflow
 
 Execute the following loop:
