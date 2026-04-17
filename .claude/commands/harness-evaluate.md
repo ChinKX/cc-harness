@@ -8,6 +8,36 @@ Optionally, a phase number to evaluate. This is provided as: $ARGUMENTS
 
 If no phase is specified, evaluate the most recently completed phase from `.harness/STATE.md`.
 
+## Contract
+
+### Preconditions
+- `.harness/PLAN.md` exists with the target phase in its body.
+- `.harness/STATE.md` exists with the target phase listed in `phases_complete`.
+- Target phase is identified: `$ARGUMENTS` if provided, otherwise `current_phase` from `STATE.md` frontmatter.
+
+### Output artifact
+- `.harness/FEEDBACK.md` — overwritten on every evaluation.
+
+**Required frontmatter:**
+```yaml
+---
+harness_artifact: feedback
+version: 1
+phase_id: <integer>
+iteration: <integer>              # 1 for first eval of this phase; increments on re-eval after REVISE
+verdict: APPROVE                   # one of APPROVE | REVISE | BLOCK
+criteria_total: <integer>
+criteria_met: <integer>
+---
+```
+
+### Vocabulary
+- `verdict`:
+  - `APPROVE` — all acceptance criteria PASS. Orchestrator advances to next phase.
+  - `REVISE` — one or more criteria FAIL or PARTIAL. Orchestrator re-runs the Generator for this phase.
+  - `BLOCK` — critical issue, or `iteration >= 3` with unresolved failures. Orchestrator stops and escalates to human.
+- `iteration`: must strictly increment by 1 across re-evaluations of the same `phase_id`. If prior `FEEDBACK.md` exists for this phase, read its `iteration` and add 1.
+
 ## Before You Start
 
 1. **Read the plan** — load `.harness/PLAN.md` and identify the target phase's acceptance criteria.
@@ -31,6 +61,16 @@ For EACH acceptance criterion in the target phase:
 Write your evaluation to `.harness/FEEDBACK.md` (overwrite previous contents):
 
 ```markdown
+---
+harness_artifact: feedback
+version: 1
+phase_id: [N]
+iteration: [K]
+verdict: [APPROVE | REVISE | BLOCK]
+criteria_total: [T]
+criteria_met: [M]
+---
+
 # Evaluation: Phase [N] — [Name]
 
 ## Summary
@@ -58,6 +98,7 @@ Write your evaluation to `.harness/FEEDBACK.md` (overwrite previous contents):
 - [Any bugs, code quality issues, or concerns not in the criteria]
 
 ## Recommendation
+The value in the `verdict` frontmatter field MUST match the choice on this line.
 [APPROVE to move to next phase | REVISE and re-evaluate | BLOCK with critical issues]
 ```
 
